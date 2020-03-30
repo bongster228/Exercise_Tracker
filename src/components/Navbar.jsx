@@ -17,7 +17,7 @@ export default class Navbar extends Component {
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span class="navbar-toggler-icon"></span>
+          <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="mainNavbar">
           <ul className="navbar-nav mr-auto">
@@ -27,12 +27,12 @@ export default class Navbar extends Component {
               </Link>
             </li>
             <li className="navbar-item">
-              <Link to="/" className="nav-link">
+              <Link to="/create" className="nav-link">
                 Create Exercise Log
               </Link>
             </li>
             <li className="navbar-item">
-              <Link to="/" className="nav-link">
+              <Link to="/user" className="nav-link">
                 Create User
               </Link>
             </li>
