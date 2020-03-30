@@ -11,4 +11,18 @@ router.route('/').get(async (req, res) => {
   });
 });
 
+router.route('/add').post(async (req, res) => {
+  const { username } = req.body;
+
+  const newUser = await new User({ username });
+
+  await newUser.save(err => {
+    if (err) {
+      res.status(400).json(`Error: ${err}`);
+    } else {
+      res.json('User added!');
+    }
+  });
+});
+
 module.exports = router;

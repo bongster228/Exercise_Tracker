@@ -29,7 +29,7 @@ connection.once('open', () => {
 // ROUTES
 const exerciseRouter = require('./routes/exercises');
 const userRouter = require('./routes/users');
-app.use('/exercies', exerciseRouter);
+app.use('/exercises', exerciseRouter);
 app.use('/users', userRouter);
 
 app.listen(PORT, () => {
