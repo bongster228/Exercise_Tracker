@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import DatePicker from 'react-datepicker';
+import axios from 'axios';
 import 'react-datepicker/dist/react-datepicker.css';
 
 export default class CreateExercise extends Component {
@@ -12,54 +13,71 @@ export default class CreateExercise extends Component {
       description: '',
       duration: 0,
       date: new Date(),
-      users: []
+      users: [],
     };
   }
 
-  componentDidMount() {
-    this.setState({
-      users: ['test user', 'test2', 'test3'],
-      username: 'test user'
-    });
-  }
+  componentDidMount = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/users');
 
-  onChnageUsername = e => {
+      if (response.data.length > 0) {
+        this.setState({
+          users: response.data.map((user) => user.username),
+          username: response.data[0].username,
+        });
+      }
+    } catch (err) {}
+  };
+
+  onChnageUsername = (e) => {
     this.setState({
-      username: e.target.value
+      username: e.target.value,
     });
   };
 
-  onChangeDescription = e => {
+  onChangeDescription = (e) => {
     this.setState({
-      description: e.target.value
+      description: e.target.value,
     });
   };
 
-  onChangeDuration = e => {
+  onChangeDuration = (e) => {
     this.setState({
-      duration: e.target.value
+      duration: e.target.value,
     });
   };
 
-  onChangeDate = date => {
+  onChangeDate = (date) => {
     this.setState({
-      date: date
+      date: date,
     });
   };
 
-  onSubmit = e => {
+  onSubmit = async (e) => {
     e.preventDefault();
 
     const exercise = {
       username: this.state.username,
       description: this.state.description,
       duration: this.state.duration,
-      date: this.state.date
+      date: this.state.date,
     };
 
     console.log(exercise);
 
-    // Redirect use back to home page
+    try {
+      const response = await axios.post(
+        'http://localhost:5000/exercises/add',
+        exercise
+      );
+
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
+
+    // Redirect to home page
     window.location = '/';
   };
 
@@ -71,13 +89,12 @@ export default class CreateExercise extends Component {
           <div className="form-group">
             <label htmlFor="">Username: </label>
             <select
-              ref="userInput"
               required
               className="form-control"
               value={this.state.username}
               onChange={this.onChnageUsername}
             >
-              {this.state.users.map(user => {
+              {this.state.users.map((user) => {
                 return (
                   <option key={user} value={user}>
                     {user}

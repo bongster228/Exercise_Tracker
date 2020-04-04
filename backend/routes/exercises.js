@@ -1,8 +1,8 @@
 const router = require('express').Router();
 const Exercise = require('../models/exercise.model');
 
-// Index Route
-router.route('/').get(async (re, res) => {
+// Exercises Get Route
+router.route('/').get(async (req, res) => {
   await Exercise.find((err, exercieses) => {
     if (err) {
       res.status(400).json(`Error: ${err}`);
@@ -16,20 +16,21 @@ router.route('/').get(async (re, res) => {
 router.route('/add').post(async (req, res) => {
   const { username, description, duration, date } = req.body;
 
+  console.log(req.body);
+
   const newExercise = await new Exercise({
     username,
     description,
     duration,
-    date
+    date,
   });
 
-  await newExercise.save(err => {
-    if (err) {
-      res.status(400).json(`Error: ${err}`);
-    } else {
-      res.json('Exercise added!!');
-    }
-  });
+  try {
+    await newExercise.save();
+    res.json('Exercise Added!');
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 // Show Route
@@ -47,7 +48,7 @@ router.route('/:id').get(async (req, res) => {
 // Delete Route
 router.route('/:id').delete(async (req, res) => {
   const { id } = req.params;
-  await Exercise.findByIdAndDelete(id, err => {
+  await Exercise.findByIdAndDelete(id, (err) => {
     if (err) {
       res.status(400).json(`Error: ${err}`);
     } else {
@@ -68,10 +69,10 @@ router.route('/update/:id').post(async (req, res) => {
     username,
     description,
     duration,
-    date
+    date,
   };
 
-  await Exercise.findByIdAndUpdate(id, updatedExercise, err => {
+  await Exercise.findByIdAndUpdate(id, updatedExercise, (err) => {
     if (err) {
       res.status(400).json(`Error: ${err}`);
     } else {

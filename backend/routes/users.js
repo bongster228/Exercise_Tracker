@@ -1,14 +1,15 @@
 const router = require('express').Router();
 const User = require('../models/user.model');
 
+// User Get Route
+// Responds with an array of all the available users
 router.route('/').get(async (req, res) => {
-  await User.find((err, users) => {
-    if (err) {
-      res.status(400).json(`Error: ${err}`);
-    } else {
-      res.json(users);
-    }
-  });
+  try {
+    const data = await User.find();
+    res.json(data);
+  } catch (err) {
+    res.status(400).json(`Error: ${err}`);
+  }
 });
 
 router.route('/add').post(async (req, res) => {
